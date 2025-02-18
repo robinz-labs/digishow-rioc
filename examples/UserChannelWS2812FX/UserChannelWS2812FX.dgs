@@ -1,0 +1,145 @@
+{
+    "appInfo": {
+        "appExperimental": true,
+        "appName": "DigiShow LINK",
+        "appVersion": "1.6"
+    },
+    "interfaces": [
+        {
+            "endpoints": [
+            ],
+            "mode": "",
+            "name": "metronome1",
+            "type": "metronome"
+        },
+        {
+            "endpoints": [
+            ],
+            "mode": "",
+            "name": "hotkey1",
+            "type": "hotkey"
+        },
+        {
+            "endpoints": [
+            ],
+            "mode": "",
+            "name": "launch1",
+            "type": "launch"
+        },
+        {
+            "endpoints": [
+            ],
+            "mode": "local",
+            "name": "pipe1",
+            "type": "pipe"
+        },
+        {
+            "comPort": "tty.usbmodem1101",
+            "endpoints": [
+                {
+                    "channel": 1,
+                    "enabled": true,
+                    "initial": -1,
+                    "name": "user_channel1",
+                    "range": 255,
+                    "type": "user_channel",
+                    "unit": 1
+                },
+                {
+                    "channel": 2,
+                    "enabled": true,
+                    "initial": -1,
+                    "name": "user_channel2",
+                    "range": 3000,
+                    "type": "user_channel",
+                    "unit": 1
+                },
+                {
+                    "channel": 3,
+                    "enabled": true,
+                    "initial": -1,
+                    "name": "user_channel3",
+                    "range": 255,
+                    "type": "user_channel",
+                    "unit": 1
+                },
+                {
+                    "channel": 4,
+                    "enabled": true,
+                    "initial": -1,
+                    "name": "user_channel4",
+                    "range": 255,
+                    "type": "user_channel",
+                    "unit": 1
+                },
+                {
+                    "channel": 5,
+                    "enabled": true,
+                    "initial": -1,
+                    "name": "user_channel5",
+                    "range": 255,
+                    "type": "user_channel",
+                    "unit": 1
+                },
+                {
+                    "channel": 6,
+                    "enabled": true,
+                    "initial": -1,
+                    "name": "user_channel6",
+                    "range": 55,
+                    "type": "user_channel",
+                    "unit": 1
+                }
+            ],
+            "mode": "general",
+            "name": "rioc1",
+            "outputInterval": 20,
+            "type": "rioc"
+        }
+    ],
+    "launches": {
+    },
+    "metronome": {
+        "bpm": 120,
+        "link": false,
+        "quantum": 4,
+        "run": false,
+        "sound": false
+    },
+    "remoteWeb": {
+        "port": 8888,
+        "run": false
+    },
+    "slots": [
+        {
+            "destination": "rioc1/user_channel1",
+            "linked": true,
+            "title": "Brightness"
+        },
+        {
+            "destination": "rioc1/user_channel2",
+            "linked": true,
+            "title": "Speed"
+        },
+        {
+            "destination": "rioc1/user_channel3",
+            "linked": true,
+            "title": "Red"
+        },
+        {
+            "destination": "rioc1/user_channel4",
+            "linked": true,
+            "title": "Green"
+        },
+        {
+            "destination": "rioc1/user_channel5",
+            "linked": true,
+            "title": "Blue"
+        },
+        {
+            "destination": "rioc1/user_channel6",
+            "linked": true,
+            "title": "FX Mode"
+        }
+    ]
+}
