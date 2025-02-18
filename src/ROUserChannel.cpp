@@ -24,14 +24,11 @@ bool ROUserChannel::setup(byte msg[8], byte address_from)
   byte channel = msg[2];
   byte mode = msg[3];
 
-  if (channel>=0 && channel<CHANNEL_COUNT) {
-    _channel = channel;
-    _mode = mode;
-    _notifyEnabled = false;
-    _notifyAddress = address_from;
-    return true;
-  } 
-  return false;
+  _channel = channel;
+  _mode = mode;
+  _notifyEnabled = false;
+  _notifyAddress = address_from;
+  return true;
 }
 
 void ROUserChannel::execute(byte msg[8], byte address_from)

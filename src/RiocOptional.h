@@ -1,3 +1,16 @@
+/*
+
+	DigiShow RIOC
+	Optional Settings
+
+	NOTE: Please edit file RiocOptional.h for more option settings.
+
+	Before you decide to enable optional components, 
+	make sure that the necessary libraries are installed.
+
+*/
+
+#pragma once
 
 // library Adafruit_NeoPixel is required to enable option RGBLED
 // http://github.com/adafruit/Adafruit_NeoPixel
@@ -42,7 +55,7 @@
 // #define OPT_UD_ALADDIN
 
 
-// set the number of user channels,
-// user channels are usually used by the user device to communicate with the remote app.
+// need enable the option if your custom code requires more available program storage space on the arduino
+// once uses LITE option, RIOC only supports basic IO and user channels. 
 
-#define USER_CHANNEL_COUNT 32
+// #define OPT_RIOC_LITE

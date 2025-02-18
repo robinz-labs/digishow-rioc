@@ -3,7 +3,7 @@
 
 #include "RiocMessager.h"
 
-#define RIOC_SERIAL Serial
+#define RIOC_SERIAL Serial1
 
 class RiocSerialMessager : public RiocMessager {
 		

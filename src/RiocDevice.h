@@ -3,10 +3,10 @@
 
 #include "RiocMessager.h"
 #include "RiocObject.h"
-#include "RiocUserDevice.h"
+#include "ROUserChannel.h"
 
 #define RIOC_VERSION_MAJOR 0
-#define RIOC_VERSION_MINOR 41
+#define RIOC_VERSION_MINOR 50
 
 #define RO_GENERAL_DIGITAL_IN           0x01
 #define RO_GENERAL_DIGITAL_OUT          0x02
@@ -38,10 +38,9 @@ extern RiocObject* pinObject[PIN_COUNT];
 extern bool portOccupied[PORT_COUNT];
 extern RiocObject* portObject[PORT_COUNT];
 
-extern bool channelOccupied[CHANNEL_COUNT];
-extern RiocObject* channelObject[CHANNEL_COUNT];
+extern RiocObject** channelObject;
 
-void initRioc(byte unitId);
+void initRioc(byte unitId, int userChannelCount = 1);
 void processRioc();
 
 RiocObject* setupRioc(byte msg[8], byte address_from);
@@ -50,5 +49,9 @@ void executeRioc(byte msg[8], byte address_from);
 RiocObject* createObject(byte objectType, 
                          byte param1=0, byte param2=0, byte param3=0, 
                          byte param4=0, byte param5=0, byte param6=0);
+
+ROUserChannel* createUserChannel(int index);
+ROUserChannel* userChannel(int index);
+int userChannelCount();
 
 #endif // LIB_RIOC_DEVICE_H_

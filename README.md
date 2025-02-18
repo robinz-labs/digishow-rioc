@@ -1,17 +1,27 @@
-# rioc-arduino
-
-RIOC is an acronym for Remote IO Control. rioc-arduino is an Arduino sketch program that enables Arduino IO pins to be reconfigurable and controllable by remote apps like h5control or DigiShow LINK. 
+# DigiShow RIOC
  
-rioc-arduino is able to configure and drive your Arduino units to be parts in a simple controller network using USB for controlling digital/analog IO, motors, servos, LED lights, sensors etc.
-
-For **DigiShow** users, Arduino is an open source electronic controller used to create homemade instruments or interactive installations. Using DigiShow on your computer, it's easy to control sensors, motors or LEDs through an Arduino connected to your computer USB port, you don't need to program on Arduino to control IO, just upload this preprepared RIOC sketch to your Arduino board (or Arduino PLC). 
+RIOC just means Remote IO Control. DigiShow RIOC is an Arduino library that enables Arduino GPIO to be reconfigured and controlled by a remote DigiShow LINK app. 
+ 
+Using DigiShow on your computer, it's easy to control sensors and actuators through an Arduino connected to your computer USB port, you don't need to program on the Arduino to control the IO, just upload the pre-prepared RIOC sketch to your Arduino board (or Arduino PLC). 
  
 Enjoys, 
  
  
-## How to make a remote-controlled Arduino with RIOC ?
+## How to make an Arduino with RIOC ?
+ 
+1. Need an Arduino MEGA, UNO, Nano or a ESP32 board.
+ 
+2. Download the latest version of the DigiShow RIOC library from GitHub or find it in the Extra folder of the DigiShow installation package. 
+ 
+3. Add the library to your Arduino IDE by selecting Sketch > Include Library > Add .ZIP Library and choosing the downloaded file. 
+ 
+4. Open the RIOC sketch from the Arduino IDE: File > Examples > DigiShow RIOC > RiocArduino. 
+ 
+5. Upload the sketch to your Arduino board. 
 
-1. Need an Arduino MEGA or UNO, Nano board.
 
-2. Open sketch RiocArduino.ino in Arduino IDE and upload the program to the Arduino. 
-
+## Add custom code and use user channels
+ 
+You can open more examples named with the UserChannel prefix to learn how to add custom code and use user channels to exchange variables with a remote DigiShow app.  
+ 
+Usually custom code can contain some logic and drivers to support specific complex IO components. 

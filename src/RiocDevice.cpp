@@ -6,24 +6,28 @@
 #include "RiocDevice.h"
 #include "RiocGlobal.h"
 #include "RiocSerialMessager.h"
+
+#include "ROUserChannel.h"
 #include "RODigitalIn.h"
 #include "RODigitalOut.h"
 #include "ROAnalogIn.h"
+#include "RORudderServo.h"
+#include "ROTone.h"
+
+#ifndef OPT_RIOC_LITE
 #include "ROAnalogOut.h"
 #include "ROUartSerial.h"
 #include "ROMultipleDigitalIn.h"
 #include "ROMultipleDigitalOut.h"
 #include "ROMotor.h"
 #include "ROStepper.h"
-#include "RORudderServo.h"
 #include "ROEncoder.h"
 #include "ROUltrasonicRanger.h"
 #include "ROThermometer.h"
-#include "ROTone.h"
 #include "RORgbLed.h"
 #include "ROIrTransmitter.h"
 #include "ROIrReceiver.h"
-#include "ROUserChannel.h"
+#endif
 
 byte unitDescription[4] = {'R', 'I', 'O', 'C'};
 
@@ -37,8 +41,8 @@ RiocObject* pinObject[PIN_COUNT];
 bool portOccupied[PORT_COUNT];
 RiocObject* portObject[PORT_COUNT];
 
-bool channelOccupied[CHANNEL_COUNT];
-RiocObject* channelObject[CHANNEL_COUNT];
+int channelCount = 0;
+RiocObject** channelObject;
 
 bool pinAvailable(int pin) { return (pin < PIN_COUNT && !pinOccupied[pin]); }
 bool pinManaged(int pin) { return (pin < PIN_COUNT && pinObject[pin]!=NULL); }
@@ -46,8 +50,8 @@ bool pinManaged(int pin) { return (pin < PIN_COUNT && pinObject[pin]!=NULL); }
 bool portAvailable(int port) { return (port < PORT_COUNT && !portOccupied[port]); }
 bool portManaged(int port) { return (port < PORT_COUNT && portObject[port]!=NULL); }
 
-bool channelAvailable(int channel) { return (channel < CHANNEL_COUNT && !channelOccupied[channel]); }
-bool channelManaged(int channel) { return (channel < CHANNEL_COUNT && channelObject[channel]!=NULL); }
+bool channelAvailable(int channel) { return (channel < channelCount && channelObject[channel]==NULL); }
+bool channelManaged(int channel) { return (channel < channelCount && channelObject[channel]!=NULL); }
 
 bool pinsAvailable(int pin, int number) {
     for (int n=0; n<number ; n++) {
@@ -61,18 +65,20 @@ void onMessageReceived(byte msg[8], byte address_from);
 //
 // initialize the rioc device 
 //
-void initRioc(byte unitId)
+void initRioc(byte unitId, int userChannelCount)
 {
   for (int n=0 ; n<PIN_COUNT ; n++) {
     pinOccupied[n] = false;    
     pinObject[n] = NULL;
   }
   for (int n=0 ; n<PORT_COUNT ; n++) {
-    portOccupied[n] = false;    
+    portOccupied[n] = false;
     portObject[n] = NULL;
   }
-  for (int n=0 ; n<CHANNEL_COUNT ; n++) {
-    channelOccupied[n] = false;
+
+  channelCount = userChannelCount;
+  channelObject = new RiocObject*[channelCount];
+  for (int n=0 ; n<channelCount ; n++) {
     channelObject[n] = NULL;
   }
   
@@ -119,9 +125,6 @@ void initRioc(byte unitId)
     unitDescription[2], unitDescription[3]
   };
   messager->sendMessage(msg, 0);
-
-  // init others for user device
-  initUserDevice();
 }
 
 //
@@ -137,12 +140,9 @@ void processRioc()
   for (int n=0 ; n<PORT_COUNT ; n++) {
     if (portObject[n] != NULL) portObject[n]->process();
   }
-  for (int n=0 ; n<CHANNEL_COUNT ; n++) {
+  for (int n=0 ; n<channelCount ; n++) {
     if (channelObject[n] != NULL) channelObject[n]->process();
   }
-
-  // do more things for user device
-  processUserDevice();
 }
 
 //
@@ -266,7 +266,11 @@ RiocObject* setupRioc(byte msg[8], byte address_from)
   int type = msg[0];
   int mode = -1;
 
-  if (type==RO_GENERAL_DIGITAL_IN) {
+  if (type==RO_USER_CHANNEL) {
+
+    if (channelAvailable(msg[2])) obj = (RiocObject*)(new ROUserChannel());
+
+  } else if (type==RO_GENERAL_DIGITAL_IN) {
 
     if (pinAvailable(msg[2])) obj = (RiocObject*)(new RODigitalIn());
 
@@ -277,7 +281,17 @@ RiocObject* setupRioc(byte msg[8], byte address_from)
   } else if (type==RO_GENERAL_ANALOG_IN) {
 
     if (pinAvailable(msg[2])) obj = (RiocObject*)(new ROAnalogIn());
+
+  } else if (type==RO_MOTION_RUDDER) {
+
+    if (pinAvailable(msg[2])) obj = (RiocObject*)(new RORudderServo());    
+
+  } else if (type==RO_SOUND_TONE) {
+
+    if (pinAvailable(msg[2])) obj = (RiocObject*)(new ROTone());
   
+#ifndef OPT_RIOC_LITE
+
   } else if (type==RO_GENERAL_ANALOG_OUT) {
 
     if (pinAvailable(msg[2])) obj = (RiocObject*)(new ROAnalogOut());
@@ -306,10 +320,6 @@ RiocObject* setupRioc(byte msg[8], byte address_from)
         (mode==STEPPER_MODE_PUL_DIR  && pinAvailable(msg[2]) && pinAvailable(msg[3])) ||
         (mode==STEPPER_MODE_PUL_DIR_ && pinAvailable(msg[2]) && pinAvailable(msg[3]))) obj = (RiocObject*)(new ROStepper());
 
-  } else if (type==RO_MOTION_RUDDER) {
-
-    if (pinAvailable(msg[2])) obj = (RiocObject*)(new RORudderServo());    
-
   } else if (type==RO_SENSOR_ENCODER) {
 
     if (pinAvailable(msg[2]) && pinAvailable(msg[3])) obj = (RiocObject*)(new ROEncoder());
@@ -322,10 +332,6 @@ RiocObject* setupRioc(byte msg[8], byte address_from)
 
     if (pinAvailable(msg[2])) obj = (RiocObject*)(new ROThermometer());
     
-  } else if (type==RO_SOUND_TONE) {
-
-    if (pinAvailable(msg[2])) obj = (RiocObject*)(new ROTone());
-
   } else if (type==RO_LIGHT_RGBLED) {
 
     if (pinAvailable(msg[2])) obj = (RiocObject*)(new RORgbLed());
@@ -338,10 +344,7 @@ RiocObject* setupRioc(byte msg[8], byte address_from)
 
     if (pinAvailable(msg[2])) obj = (RiocObject*)(new ROIrReceiver());
 
-  } else if (type==RO_USER_CHANNEL) {
-
-    if (channelAvailable(msg[2])) obj = (RiocObject*)(new ROUserChannel());
-
+#endif
   }
 
   // setup object
@@ -360,8 +363,9 @@ RiocObject* setupRioc(byte msg[8], byte address_from)
 
       // one channel occupied
       int channel = msg[2];
-      channelOccupied[channel] = true;
       channelObject[channel] = obj;
+
+#ifndef OPT_RIOC_LITE
 
     } else if (type==RO_GENERAL_UART_SERIAL) {
 
@@ -406,6 +410,8 @@ RiocObject* setupRioc(byte msg[8], byte address_from)
         pinOccupied[pin+n] = true;
         pinObject[pin+n] = obj;
       }
+
+#endif
 
     } else {
 
@@ -465,7 +471,7 @@ void executeRioc(byte msg[8], byte address_from)
 }
 
 //
-// create local rioc object
+// create a rioc object locally
 //
 RiocObject* createObject(byte objectType, 
                          byte param1, byte param2, byte param3, 
@@ -473,4 +479,31 @@ RiocObject* createObject(byte objectType,
 {
     byte cmd[] = { objectType, 0x00, param1, param2, param3, param4, param5, param6 };
     return setupRioc(cmd, INTERNAL_MESSAGING);
+}
+
+//
+// create an user channel locally
+//
+ROUserChannel* createUserChannel(int index) 
+{ 
+    return (ROUserChannel*)createObject(RO_USER_CHANNEL, (byte)index); 
+}
+
+//
+// get the user channel
+//
+ROUserChannel* userChannel(int index)
+{
+    if (index>=0 && index<channelCount) {
+      return (ROUserChannel*)channelObject[index]; 
+    } 
+    return NULL;
+}
+
+//
+// get the number of user channels
+//
+int userChannelCount()
+{
+    return channelCount;
 }

@@ -1,3 +1,4 @@
+RIOC for Arduino
 Change List
 
 v0.10  2016/08/18
@@ -45,3 +46,8 @@ V0.40  2024/11/15
 V0.41  2025/02/10
 + added encoder range settings
 + added user channel support
+
+V0.50  2025/02/18
+! released as an arduino library named digishow-rioc
++ added user channel usage examples
+ 
