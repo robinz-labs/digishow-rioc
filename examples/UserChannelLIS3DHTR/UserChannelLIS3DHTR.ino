@@ -42,9 +42,9 @@ void setup()
   initRioc(UNIT_ID, CHANNEL_COUNT);
 
   // initialize user channels 
-  ROUserChannel* channel0 = createUserChannel(0); // x
-  ROUserChannel* channel1 = createUserChannel(1); // y
-  ROUserChannel* channel2 = createUserChannel(2); // z
+  createUserChannel(0); // x
+  createUserChannel(1); // y
+  createUserChannel(2); // z
   
   // init LIS3DHTR
   LIS.begin(Wire, 0x19); //use IIC

@@ -9,19 +9,17 @@ Enjoys,
  
 ## How to make a RIOC Arduino ?
  
-1. Need an Arduino MEGA, UNO, Nano or a ESP32 board.
+1. Need an Arduino MEGA, UNO, Nano or a ESP32 board. 
+
+2. Open Library Manager in the Arduino IDE, find and install the library named DigiShow RIOC . 
  
-2. Download the latest version of the DigiShow RIOC library from GitHub (or find it in the Extra folder of the DigiShow installation package). 
+3. Open the RIOC sketch from the Arduino IDE: File > Examples > DigiShow RIOC > RiocArduino. 
  
-3. Add the library to your Arduino IDE by selecting Sketch > Include Library > Add .ZIP Library and choosing the downloaded file. 
- 
-4. Open the RIOC sketch from the Arduino IDE: File > Examples > DigiShow RIOC > RiocArduino. 
- 
-5. Upload the sketch to your Arduino board. 
+4. Upload the sketch to your Arduino board. 
 
 
 ## Add custom code and use user channels
  
 You can open more examples named with the UserChannel prefix to learn how to add custom code and use user channels to exchange variables with a remote DigiShow app.  
  
-Usually custom code can contain some logic and drivers to support specific complex IO components. 
+Usually custom code can contain some logic and drivers to support specific complex IO components such as AI cameras, accelerometers and WS2812 NeoPixel LEDs, etc. 
