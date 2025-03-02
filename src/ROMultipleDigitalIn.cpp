@@ -35,13 +35,7 @@ bool ROMultipleDigitalIn::setup(byte msg[8], byte address_from)
     _mode = mode;
     
     for (int n=_pin ; n <= (_pin+_number-1) ; n++) {
-      
-#if defined(OPT_UD_ALADDIN)
-      pinMode(n, INPUT); // use pulldown resister on aladdin board
-#else
-      pinMode(n, (_mode ? INPUT : INPUT_PULLUP));
-#endif
-      
+      pinMode(n, riocPinModeConfig(_mode));
     }
 
     return true;

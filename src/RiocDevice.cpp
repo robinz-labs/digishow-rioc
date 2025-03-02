@@ -11,23 +11,63 @@
 #include "RODigitalIn.h"
 #include "RODigitalOut.h"
 #include "ROAnalogIn.h"
-#include "RORudderServo.h"
-#include "ROTone.h"
 
-#ifndef OPT_RIOC_LITE
+#ifdef OPT_ENABLE_AOUT
 #include "ROAnalogOut.h"
+#endif
+
+#ifdef OPT_ENABLE_UART
 #include "ROUartSerial.h"
+#endif
+
+#ifdef OPT_ENABLE_MULTI_DIN
 #include "ROMultipleDigitalIn.h"
+#endif
+
+#ifdef OPT_ENABLE_MULTI_DOUT
 #include "ROMultipleDigitalOut.h"
+#endif
+
+#ifdef OPT_ENABLE_MOTOR
 #include "ROMotor.h"
+#endif
+
+#ifdef OPT_ENABLE_STEPPER
 #include "ROStepper.h"
+#endif
+
+#ifdef OPT_ENABLE_RUDDER
+#include "RORudderServo.h"
+#endif
+
+#ifdef OPT_ENABLE_ENCODER
 #include "ROEncoder.h"
+#endif
+
+#ifdef OPT_ENABLE_ULTRASONIC
 #include "ROUltrasonicRanger.h"
+#endif
+
+#ifdef OPT_ENABLE_THERMOMETER
 #include "ROThermometer.h"
+#endif
+
+#ifdef OPT_ENABLE_TONE
+#include "ROTone.h"
+#endif
+
+#ifdef OPT_ENABLE_RGBLED
 #include "RORgbLed.h"
+#endif
+
+#ifdef OPT_ENABLE_IR_TRANSMITTER
 #include "ROIrTransmitter.h"
+#endif
+
+#ifdef OPT_ENABLE_IR_RECEIVER
 #include "ROIrReceiver.h"
 #endif
+
 
 byte unitDescription[4] = {'R', 'I', 'O', 'C'};
 
@@ -267,84 +307,90 @@ RiocObject* setupRioc(byte msg[8], byte address_from)
   int mode = -1;
 
   if (type==RO_USER_CHANNEL) {
-
     if (channelAvailable(msg[2])) obj = (RiocObject*)(new ROUserChannel());
 
   } else if (type==RO_GENERAL_DIGITAL_IN) {
-
     if (pinAvailable(msg[2])) obj = (RiocObject*)(new RODigitalIn());
 
   } else if (type==RO_GENERAL_DIGITAL_OUT) {
-
     if (pinAvailable(msg[2])) obj = (RiocObject*)(new RODigitalOut());
 
   } else if (type==RO_GENERAL_ANALOG_IN) {
-
     if (pinAvailable(msg[2])) obj = (RiocObject*)(new ROAnalogIn());
-
-  } else if (type==RO_MOTION_RUDDER) {
-
-    if (pinAvailable(msg[2])) obj = (RiocObject*)(new RORudderServo());    
-
-  } else if (type==RO_SOUND_TONE) {
-
-    if (pinAvailable(msg[2])) obj = (RiocObject*)(new ROTone());
   
-#ifndef OPT_RIOC_LITE
-
+#ifdef OPT_ENABLE_AOUT
   } else if (type==RO_GENERAL_ANALOG_OUT) {
-
     if (pinAvailable(msg[2])) obj = (RiocObject*)(new ROAnalogOut());
+#endif
 
+#ifdef OPT_ENABLE_UART
   } else if (type==RO_GENERAL_UART_SERIAL) {
-
     if (portAvailable(msg[2])) obj = (RiocObject*)(new ROUartSerial());
+#endif
 
+#ifdef OPT_ENABLE_MULTI_DIN
   } else if (type==RO_GENERAL_MULTIPLE_DIGITAL_IN) {
-
     if (pinsAvailable(msg[2], msg[3])) obj = (RiocObject*)(new ROMultipleDigitalIn());
+#endif
 
+#ifdef OPT_ENABLE_MULTI_DOUT
   } else if (type==RO_GENERAL_MULTIPLE_DIGITAL_OUT) {
-
     if (pinsAvailable(msg[2], msg[3])) obj = (RiocObject*)(new ROMultipleDigitalOut());
+#endif
 
+#ifdef OPT_ENABLE_MOTOR
   } else if (type==RO_MOTION_MOTOR) {
-
     if (pinAvailable(msg[2]) && pinAvailable(msg[3])) obj = (RiocObject*)(new ROMotor());
+#endif
 
+#ifdef OPT_ENABLE_STEPPER
   } else if (type==RO_MOTION_STEPPER) {
-
     mode = msg[6];
-
     if ((mode==STEPPER_MODE_NORMAL   && pinAvailable(msg[2]) && pinAvailable(msg[3]) && pinAvailable(msg[4]) && pinAvailable(msg[5])) ||
         (mode==STEPPER_MODE_PUL_DIR  && pinAvailable(msg[2]) && pinAvailable(msg[3])) ||
         (mode==STEPPER_MODE_PUL_DIR_ && pinAvailable(msg[2]) && pinAvailable(msg[3]))) obj = (RiocObject*)(new ROStepper());
-
-  } else if (type==RO_SENSOR_ENCODER) {
-
-    if (pinAvailable(msg[2]) && pinAvailable(msg[3])) obj = (RiocObject*)(new ROEncoder());
-
-  } else if (type==RO_SENSOR_ULTRASONIC_RANGER) {
-
-    if (pinAvailable(msg[2]) && pinAvailable(msg[3])) obj = (RiocObject*)(new ROUltrasonicRanger());
-
-  } else if (type==RO_SENSOR_THERMOMETER) {
-
-    if (pinAvailable(msg[2])) obj = (RiocObject*)(new ROThermometer());
-    
-  } else if (type==RO_LIGHT_RGBLED) {
-
-    if (pinAvailable(msg[2])) obj = (RiocObject*)(new RORgbLed());
-
-  } else if (type==RO_IR_TRANSMITTER) {
-
-    if (pinAvailable(msg[2])) obj = (RiocObject*)(new ROIrTransmitter());
-  
-  } else if (type==RO_IR_RECEIVER) {
-
-    if (pinAvailable(msg[2])) obj = (RiocObject*)(new ROIrReceiver());
-
 #endif
+
+#ifdef OPT_ENABLE_RUDDER
+  } else if (type==RO_MOTION_RUDDER) {
+    if (pinAvailable(msg[2])) obj = (RiocObject*)(new RORudderServo());
+#endif
+
+#ifdef OPT_ENABLE_ENCODER
+  } else if (type==RO_SENSOR_ENCODER) {
+    if (pinAvailable(msg[2]) && pinAvailable(msg[3])) obj = (RiocObject*)(new ROEncoder());
+#endif
+
+#ifdef OPT_ENABLE_ULTRASONIC
+  } else if (type==RO_SENSOR_ULTRASONIC_RANGER) {
+    if (pinAvailable(msg[2]) && pinAvailable(msg[3])) obj = (RiocObject*)(new ROUltrasonicRanger());
+#endif
+
+#ifdef OPT_ENABLE_THERMOMETER
+  } else if (type==RO_SENSOR_THERMOMETER) {
+    if (pinAvailable(msg[2])) obj = (RiocObject*)(new ROThermometer());
+#endif
+
+#ifdef OPT_ENABLE_TONE
+  } else if (type==RO_SOUND_TONE) {
+    if (pinAvailable(msg[2])) obj = (RiocObject*)(new ROTone());
+#endif
+
+#ifdef OPT_ENABLE_RGBLED
+  } else if (type==RO_LIGHT_RGBLED) {
+    if (pinAvailable(msg[2])) obj = (RiocObject*)(new RORgbLed());
+#endif
+
+#ifdef OPT_ENABLE_IR_TRANSMITTER
+  } else if (type==RO_IR_TRANSMITTER) {
+    if (pinAvailable(msg[2])) obj = (RiocObject*)(new ROIrTransmitter());
+#endif
+
+#ifdef OPT_ENABLE_IR_RECEIVER
+  } else if (type==RO_IR_RECEIVER) {
+    if (pinAvailable(msg[2])) obj = (RiocObject*)(new ROIrReceiver());
+#endif
+
   }
 
   // setup object
@@ -365,15 +411,16 @@ RiocObject* setupRioc(byte msg[8], byte address_from)
       int channel = msg[2];
       channelObject[channel] = obj;
 
-#ifndef OPT_RIOC_LITE
-
+#if defined(OPT_ENABLE_UART)
     } else if (type==RO_GENERAL_UART_SERIAL) {
 
       // one port occupied
       int port = msg[2];
       portOccupied[port] = true;
       portObject[port] = obj;
-    
+#endif
+
+#if defined(OPT_ENABLE_MOTOR) || defined(OPT_ENABLE_ENCODER) || defined(OPT_ENABLE_ULTRASONIC) 
     } else if (type==RO_MOTION_MOTOR || type==RO_SENSOR_ENCODER || type==RO_SENSOR_ULTRASONIC_RANGER) {
 
       // two pins occupied
@@ -382,7 +429,9 @@ RiocObject* setupRioc(byte msg[8], byte address_from)
         pinOccupied[pin] = true;
         pinObject[pin] = obj;
       }
+#endif
 
+#if defined(OPT_ENABLE_STEPPER)
     } else if (type==RO_MOTION_STEPPER && mode==STEPPER_MODE_NORMAL) {
 
       // four pins occupied
@@ -391,7 +440,9 @@ RiocObject* setupRioc(byte msg[8], byte address_from)
         pinOccupied[pin] = true;
         pinObject[pin] = obj;
       }
+#endif
 
+#if defined(OPT_ENABLE_STEPPER)
     } else if (type==RO_MOTION_STEPPER && (mode==STEPPER_MODE_PUL_DIR || mode==STEPPER_MODE_PUL_DIR_)) {
 
       // two pins occupied
@@ -400,7 +451,9 @@ RiocObject* setupRioc(byte msg[8], byte address_from)
         pinOccupied[pin] = true;
         pinObject[pin] = obj;
       }
+#endif
 
+#if defined(OPT_ENABLE_MULTI_DIN) || defined(OPT_ENABLE_MULTI_DOUT) 
     } else if (type==RO_GENERAL_MULTIPLE_DIGITAL_IN || type==RO_GENERAL_MULTIPLE_DIGITAL_OUT) {
 
       // multiple pins occupied
@@ -410,7 +463,6 @@ RiocObject* setupRioc(byte msg[8], byte address_from)
         pinOccupied[pin+n] = true;
         pinObject[pin+n] = obj;
       }
-
 #endif
 
     } else {
@@ -482,11 +534,11 @@ RiocObject* createObject(byte objectType,
 }
 
 //
-// create an user channel locally
+// get the number of user channels
 //
-ROUserChannel* createUserChannel(int index) 
-{ 
-    return (ROUserChannel*)createObject(RO_USER_CHANNEL, (byte)index); 
+int userChannelCount()
+{
+    return channelCount;
 }
 
 //
@@ -501,9 +553,29 @@ ROUserChannel* userChannel(int index)
 }
 
 //
-// get the number of user channels
+// create an user channel locally
 //
-int userChannelCount()
-{
-    return channelCount;
+ROUserChannel* createUserChannel(int index) 
+{ 
+    return (ROUserChannel*)createObject(RO_USER_CHANNEL, (byte)index); 
 }
+
+//
+// write user channel value
+//
+void writeUserChannel(int index, uint32_t value)
+{
+    ROUserChannel* channel = userChannel(index);
+    if (channel != NULL) channel->write(value);
+}
+
+//
+// read user channel value
+//
+uint32_t readUserChannel(int index)
+{
+    ROUserChannel* channel = userChannel(index);
+    if (channel != NULL) return channel->read();
+    return 0;
+}
+

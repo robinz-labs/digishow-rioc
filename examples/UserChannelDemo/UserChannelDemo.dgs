@@ -1,0 +1,106 @@
+{
+    "appInfo": {
+        "appExperimental": true,
+        "appName": "DigiShow LINK",
+        "appVersion": "1.6.1"
+    },
+    "interfaces": [
+        {
+            "endpoints": [
+            ],
+            "mode": "",
+            "name": "metronome1",
+            "type": "metronome"
+        },
+        {
+            "endpoints": [
+            ],
+            "mode": "",
+            "name": "hotkey1",
+            "type": "hotkey"
+        },
+        {
+            "endpoints": [
+            ],
+            "mode": "",
+            "name": "launch1",
+            "type": "launch"
+        },
+        {
+            "endpoints": [
+            ],
+            "mode": "local",
+            "name": "pipe1",
+            "type": "pipe"
+        },
+        {
+            "comPort": "tty.usbserial-0001",
+            "endpoints": [
+                {
+                    "channel": 0,
+                    "enabled": true,
+                    "name": "user_channel1",
+                    "type": "user_channel",
+                    "unit": 1
+                },
+                {
+                    "channel": 1,
+                    "enabled": true,
+                    "name": "user_channel2",
+                    "type": "user_channel",
+                    "unit": 1
+                },
+                {
+                    "channel": 2,
+                    "enabled": true,
+                    "name": "user_channel3",
+                    "type": "user_channel",
+                    "unit": 1
+                }
+            ],
+            "mode": "general",
+            "name": "rioc1",
+            "outputInterval": 20,
+            "type": "rioc"
+        }
+    ],
+    "launches": {
+    },
+    "metronome": {
+        "bpm": 120,
+        "link": false,
+        "quantum": 4,
+        "run": false,
+        "sound": false
+    },
+    "remoteWeb": {
+        "port": 8888,
+        "run": false
+    },
+    "slots": [
+        {
+            "linked": true,
+            "source": "rioc1/user_channel1"
+        },
+        {
+            "linked": true,
+            "source": "rioc1/user_channel2"
+        },
+        {
+            "linked": true,
+            "source": "rioc1/user_channel3"
+        },
+        {
+            "destination": "rioc1/user_channel1",
+            "linked": true
+        },
+        {
+            "destination": "rioc1/user_channel2",
+            "linked": true
+        },
+        {
+            "destination": "rioc1/user_channel3",
+            "linked": true
+        }
+    ]
+}

@@ -50,4 +50,9 @@ V0.41  2025/02/10
 V0.50  2025/02/18
 ! released as an arduino library named digishow-rioc
 + added user channel usage examples
+
+V0.51  2025/03/02
+! simplified user channel functions
+! updated user channel examples
+! fixed pull-up/pull-down setting issue
  

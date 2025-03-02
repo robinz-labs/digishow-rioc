@@ -32,7 +32,7 @@ bool RODigitalIn::setup(byte msg[8], byte address_from)
   int filter = (msg[4]>32 ? 32 : msg[4]);
   unsigned int sampleInterval = ((unsigned int)msg[5] << 8) | (unsigned int)msg[6];
 
-  if (pin<=DI_PIN_MAX_NUMBER && mode<=1 && filter<=255) {
+  if (pin<=DI_PIN_MAX_NUMBER && filter<=255) {
 
     _pin = pin;
     _mode = mode;
@@ -44,24 +44,8 @@ bool RODigitalIn::setup(byte msg[8], byte address_from)
       _sampleIndex = 0;
       for (int n=0 ; n < _filter ; n++) _samples[n]=LOW;
     }
-
-    int config = INPUT;
-    switch (_mode) {
-
-      #if defined(OPT_UD_ALADDIN)
-      case 0: config = INPUT; break; // use pulldown resister on aladdin board
-      #else
-      case 0: config = INPUT_PULLUP; break;
-      #endif
-
-      case 1: config = INPUT; break;
-      case 2: config = INPUT_PULLUP; break;
-
-      #if defined(INPUT_PULLDOWN)
-      case 3: config = INPUT_PULLDOWN; break;
-      #endif
-    }
-    pinMode(_pin, config);
+    
+    pinMode(_pin, riocPinModeConfig(_mode));
     return true;
   } 
   return false;

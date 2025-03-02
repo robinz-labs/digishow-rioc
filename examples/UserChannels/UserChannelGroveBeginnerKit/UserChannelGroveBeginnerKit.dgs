@@ -1,0 +1,324 @@
+{
+    "appInfo": {
+        "appExperimental": true,
+        "appName": "DigiShow LINK",
+        "appVersion": "1.6.1"
+    },
+    "interfaces": [
+        {
+            "endpoints": [
+            ],
+            "mode": "",
+            "name": "metronome1",
+            "type": "metronome"
+        },
+        {
+            "endpoints": [
+            ],
+            "mode": "",
+            "name": "hotkey1",
+            "type": "hotkey"
+        },
+        {
+            "endpoints": [
+            ],
+            "mode": "",
+            "name": "launch1",
+            "type": "launch"
+        },
+        {
+            "endpoints": [
+                {
+                    "channel": 1,
+                    "enabled": true,
+                    "name": "analog1",
+                    "type": "analog"
+                },
+                {
+                    "channel": 2,
+                    "enabled": true,
+                    "name": "analog2",
+                    "type": "analog"
+                },
+                {
+                    "channel": 3,
+                    "enabled": true,
+                    "name": "analog3",
+                    "type": "analog"
+                },
+                {
+                    "channel": 4,
+                    "enabled": true,
+                    "initial": -1,
+                    "name": "analog4",
+                    "range": 1000000,
+                    "type": "analog"
+                },
+                {
+                    "channel": 5,
+                    "enabled": true,
+                    "initial": -1,
+                    "name": "analog5",
+                    "range": 100000,
+                    "type": "analog"
+                },
+                {
+                    "channel": 6,
+                    "enabled": true,
+                    "initial": -1,
+                    "name": "analog6",
+                    "range": 10000,
+                    "type": "analog"
+                }
+            ],
+            "mode": "local",
+            "name": "pipe1",
+            "type": "pipe"
+        },
+        {
+            "comPort": "tty.usbserial-0001",
+            "endpoints": [
+                {
+                    "channel": 0,
+                    "enabled": true,
+                    "initial": -1,
+                    "name": "user_channel1",
+                    "range": 20000,
+                    "type": "user_channel",
+                    "unit": 1
+                },
+                {
+                    "channel": 1,
+                    "enabled": true,
+                    "initial": -1,
+                    "name": "user_channel2",
+                    "range": 20000,
+                    "type": "user_channel",
+                    "unit": 1
+                },
+                {
+                    "channel": 2,
+                    "enabled": true,
+                    "initial": -1,
+                    "name": "user_channel3",
+                    "range": 20000,
+                    "type": "user_channel",
+                    "unit": 1
+                },
+                {
+                    "channel": 3,
+                    "enabled": true,
+                    "initial": -1,
+                    "name": "user_channel4",
+                    "range": 1000000,
+                    "type": "user_channel",
+                    "unit": 1
+                },
+                {
+                    "channel": 4,
+                    "enabled": true,
+                    "initial": -1,
+                    "name": "user_channel5",
+                    "range": 100000,
+                    "type": "user_channel",
+                    "unit": 1
+                },
+                {
+                    "channel": 5,
+                    "enabled": true,
+                    "initial": -1,
+                    "name": "user_channel6",
+                    "range": 10000,
+                    "type": "user_channel",
+                    "unit": 1
+                },
+                {
+                    "channel": 6,
+                    "enabled": true,
+                    "initial": -1,
+                    "name": "user_channel7",
+                    "range": 1000000,
+                    "type": "user_channel",
+                    "unit": 1
+                },
+                {
+                    "channel": 7,
+                    "enabled": true,
+                    "name": "user_channel8",
+                    "type": "user_channel",
+                    "unit": 1
+                },
+                {
+                    "channel": 4,
+                    "enabled": true,
+                    "name": "digital_out1",
+                    "type": "digital_out",
+                    "unit": 1
+                },
+                {
+                    "channel": 5,
+                    "enabled": true,
+                    "initial": -1,
+                    "name": "pfm_out1",
+                    "range": 10000,
+                    "type": "pfm_out",
+                    "unit": 1
+                },
+                {
+                    "channel": 6,
+                    "enabled": true,
+                    "name": "digital_in1",
+                    "optFilterLevel": 0,
+                    "optMode": 1,
+                    "optSamplingInterval": 0,
+                    "type": "digital_in",
+                    "unit": 1
+                },
+                {
+                    "channel": 14,
+                    "enabled": true,
+                    "name": "analog_in1",
+                    "type": "analog_in",
+                    "unit": 1
+                },
+                {
+                    "channel": 20,
+                    "enabled": true,
+                    "name": "analog_in2",
+                    "type": "analog_in",
+                    "unit": 1
+                },
+                {
+                    "channel": 16,
+                    "enabled": true,
+                    "name": "analog_in3",
+                    "type": "analog_in",
+                    "unit": 1
+                }
+            ],
+            "mode": "arduino_uno",
+            "name": "rioc1",
+            "outputInterval": 20,
+            "type": "rioc"
+        }
+    ],
+    "launches": {
+    },
+    "metronome": {
+        "bpm": 120,
+        "link": false,
+        "quantum": 4,
+        "run": false,
+        "sound": false
+    },
+    "remoteWeb": {
+        "port": 8888,
+        "run": false
+    },
+    "slots": [
+        {
+            "destination": "pipe1/analog1",
+            "inputHigh": 0.6,
+            "inputLow": 0.4,
+            "linked": true,
+            "outputHigh": 1,
+            "outputLow": 0,
+            "outputSmoothing": 100,
+            "source": "rioc1/user_channel1",
+            "title": "Acceleration X"
+        },
+        {
+            "destination": "pipe1/analog2",
+            "inputHigh": 0.6,
+            "inputInverted": false,
+            "inputLow": 0.4,
+            "linked": true,
+            "outputHigh": 1,
+            "outputInverted": false,
+            "outputLow": 0,
+            "outputLowAsZero": false,
+            "outputSmoothing": 100,
+            "source": "rioc1/user_channel2",
+            "title": "Acceleration Y"
+        },
+        {
+            "destination": "pipe1/analog3",
+            "inputHigh": 0.6,
+            "inputInverted": false,
+            "inputLow": 0.4,
+            "linked": true,
+            "outputHigh": 1,
+            "outputInverted": false,
+            "outputLow": 0,
+            "outputLowAsZero": false,
+            "outputSmoothing": 100,
+            "source": "rioc1/user_channel3",
+            "title": "Acceleration Z"
+        },
+        {
+            "destination": "pipe1/analog4",
+            "inputHigh": 1,
+            "inputLow": 0,
+            "linked": true,
+            "outputExpression": "const pressure = value * 0.01;\nconst seaLevelPressure = 1013.25;\nconst altitude = (1 - Math.pow(pressure / seaLevelPressure, 0.190284)) * 44307.69396;\n\nMath.round(altitude < 0 ? 0 : altitude * 100)",
+            "outputLow": 0,
+            "outputSmoothing": 0,
+            "source": "rioc1/user_channel4",
+            "title": "Air Pressure ( to Altitude )"
+        },
+        {
+            "destination": "pipe1/analog5",
+            "linked": true,
+            "outputExpression": "value-27315",
+            "outputSmoothing": 0,
+            "source": "rioc1/user_channel5",
+            "title": "Temperature K ( to C )"
+        },
+        {
+            "destination": "pipe1/analog6",
+            "linked": true,
+            "source": "rioc1/user_channel6",
+            "title": "Humidity"
+        },
+        {
+            "linked": true,
+            "source": "rioc1/analog_in2",
+            "title": "Light Sensor"
+        },
+        {
+            "linked": true,
+            "source": "rioc1/analog_in3",
+            "title": "Sound Sensor"
+        },
+        {
+            "linked": true,
+            "source": "rioc1/digital_in1",
+            "title": "Button"
+        },
+        {
+            "linked": true,
+            "source": "rioc1/analog_in1",
+            "title": "Knob"
+        },
+        {
+            "destination": "rioc1/digital_out1",
+            "linked": true,
+            "title": "LED"
+        },
+        {
+            "destination": "rioc1/pfm_out1",
+            "linked": true,
+            "title": "Buzzer"
+        },
+        {
+            "destination": "rioc1/user_channel7",
+            "linked": true,
+            "title": "Display Line A"
+        },
+        {
+            "destination": "rioc1/user_channel8",
+            "linked": true,
+            "title": "Display Line B"
+        }
+    ]
+}

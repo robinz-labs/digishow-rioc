@@ -2,6 +2,7 @@
 #define LIB_RIOC_OBJECT_H_
 
 #include <Arduino.h>
+#include "RiocOptional.h"
 
 #pragma GCC diagnostic ignored "-Wnarrowing"
 
@@ -67,7 +68,6 @@
 
 #endif
 
-
 class RiocMessager;
 
 class RiocObject {
@@ -84,6 +84,26 @@ public:
   virtual void process();
 
   bool isSilent();
+
+  int riocPinModeConfig(int mode) {
+
+    int config = INPUT;
+    switch (mode) {
+  
+      #if defined(OPT_UD_ALADDIN)
+      case 0: config = INPUT; break; // use pulldown resister on aladdin board
+      #else
+      case 0: config = INPUT_PULLUP; break;
+      #endif
+  
+      case 1: config = INPUT; break;
+      case 2: config = INPUT_PULLUP; break;
+  
+      #if defined(INPUT_PULLDOWN)
+      case 3: config = INPUT_PULLDOWN; break;
+      #endif
+    }
+  }
 		
 protected:
 

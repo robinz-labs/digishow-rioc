@@ -22,4 +22,4 @@ Enjoys,
  
 You can open more examples named with the UserChannel prefix to learn how to add custom code and use user channels to exchange variables with a remote DigiShow app.  
  
-Usually custom code can contain some logic and drivers to support specific complex IO components such as AI cameras, accelerometers and WS2812 NeoPixel LEDs, etc. 
+Usually custom code can contain some logic and drivers to support specific complex IO components (such as AI cameras, accelerometers and NeoPixel LEDs), and use user channels to output sensor values or input actuator parameters. 

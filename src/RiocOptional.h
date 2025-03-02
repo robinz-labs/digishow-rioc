@@ -3,34 +3,76 @@
 	DigiShow RIOC
 	Optional Settings
 
-	NOTE: Please edit file RiocOptional.h for more option settings.
+	NOTE: 
+	Please edit the file RiocOptional.h to customize your build with more compilation options to fit 
+	the program storage and dynamic memory space on your Arduino.
+	
+	Before you decide to enable some options, make sure that the necessary libraries are installed.
 
-	Before you decide to enable optional components, 
-	make sure that the necessary libraries are installed.
+	library Adafruit_NeoPixel is required for option OPT_ENABLE_RGBLED
+	http://github.com/adafruit/Adafruit_NeoPixel
 
+	library DHT is required for option OPT_ENABLE_THERMOMETER
+	http://arduino.cc/playground/Main/DHTLib
+	
+	library Arduino-IRremote is required for options OPT_ENABLE_IR_TRANSMITTER and OPT_ENABLE_IR_RECEIVER
+	http://z3t0.github.io/Arduino-IRremote/
 */
 
 #pragma once
 
-// library Adafruit_NeoPixel is required to enable option RGBLED
-// http://github.com/adafruit/Adafruit_NeoPixel
+#define OPT_RIOC_STANDARD
 
-// #define OPT_ENABLE_RGBLED
+#if defined(OPT_RIOC_FULL)
 
+	#define OPT_ENABLE_AOUT
+	#define OPT_ENABLE_UART
+	#define OPT_ENABLE_MULTI_DIN
+	#define OPT_ENABLE_MULTI_DOUT
+	#define OPT_ENABLE_MOTOR
+	#define OPT_ENABLE_STEPPER
+	#define OPT_ENABLE_RUDDER
+	#define OPT_ENABLE_ENCODER
+	#define OPT_ENABLE_ULTRASONIC
+//	#define OPT_ENABLE_THERMOMETER
+	#define OPT_ENABLE_TONE
+//	#define OPT_ENABLE_RGBLED
+//	#define OPT_ENABLE_IR_TRANSMITTER
+//	#define OPT_ENABLE_IR_RECEIVER
 
-// library DHT is required to enable option THERMOMETER
-// http://arduino.cc/playground/Main/DHTLib
+#elif defined(OPT_RIOC_STANDARD)
 
-// #define OPT_ENABLE_THERMOMETER
+//	#define OPT_ENABLE_AOUT
+//	#define OPT_ENABLE_UART
+//	#define OPT_ENABLE_MULTI_DIN
+//	#define OPT_ENABLE_MULTI_DOUT
+//	#define OPT_ENABLE_MOTOR
+	#define OPT_ENABLE_STEPPER
+	#define OPT_ENABLE_RUDDER
+	#define OPT_ENABLE_ENCODER
+//	#define OPT_ENABLE_ULTRASONIC
+//	#define OPT_ENABLE_THERMOMETER
+	#define OPT_ENABLE_TONE
+//	#define OPT_ENABLE_RGBLED
+//	#define OPT_ENABLE_IR_TRANSMITTER
+//	#define OPT_ENABLE_IR_RECEIVER
 
+#elif defined(OPT_RIOC_LITE)
 
-#if not defined(__SAM3X8E__) 
-
-// library Arduino-IRremote is required to enable option IR_TRANSMITTER and IR_RECEIVER
-// http://z3t0.github.io/Arduino-IRremote/
-
-// #define OPT_ENABLE_IR_TRANSMITTER
-// #define OPT_ENABLE_IR_RECEIVER
+//	#define OPT_ENABLE_AOUT
+//	#define OPT_ENABLE_UART
+//	#define OPT_ENABLE_MULTI_DIN
+//	#define OPT_ENABLE_MULTI_DOUT
+//	#define OPT_ENABLE_MOTOR
+//	#define OPT_ENABLE_STEPPER
+	#define OPT_ENABLE_RUDDER
+//	#define OPT_ENABLE_ENCODER
+//	#define OPT_ENABLE_ULTRASONIC
+//	#define OPT_ENABLE_THERMOMETER
+	#define OPT_ENABLE_TONE
+//	#define OPT_ENABLE_RGBLED
+//	#define OPT_ENABLE_IR_TRANSMITTER
+//	#define OPT_ENABLE_IR_RECEIVER
 
 #endif
 
@@ -53,9 +95,3 @@
 // need enable the option if your arduino is an aladdin 2560 user device
 
 // #define OPT_UD_ALADDIN
-
-
-// need enable the option if your custom code requires more available program storage space on the arduino
-// once uses LITE option, RIOC only supports basic IO and user channels. 
-
-// #define OPT_RIOC_LITE

@@ -3,26 +3,29 @@
   DigiShow RIOC
   User Channels for WS2812FX
 
-  Copyright 2016-2025 Robin Zhang & Labs
   https://github.com/robinz-labs/digishow-rioc
 
-  version 0.50
-  compatible with digishow 1.6
 
-  This program works with a WS2812 (NeoPixel) RGB LED strip connected to an Arduino 
-  Mega or a ESP32 board.
+  This program works with a WS2812 NeoPixel RGB LED strip connected to an Arduino MEGA or 
+  a ESP32 board.
 
-  In this program, demonstrates how to add custom code and use user channels to set 
-  various blinking effects on the LEDs.
+  In this program, demonstrates how to add custom code and use user channels to set various 
+  blinking effects on the WS2812 (NeoPixel) LEDs.
+
+  Upload this sketch to your Arduino, also find a DigiShow project file enclosed in the path
+  <your documents directory>/Arduino/libraries/DigiShow_RIOC/examples/UserChannels/UserChannelWS2812FX
+  open and start it in the DigiShow LINK app to work with your Arduino.
+
+  No enough storage on Arduino UNO! If you want to compile this skech for an Arduino UNO 
+  with a 32K program storage limit, please edit the file RiocOptional.h located in the path 
+  <your documents directory>/Arduino/libraries/DigiShow_RIOC/src/
+  and replace #define OPT_RIOC_STANDARD with #define OPT_RIOC_LITE for more free program 
+  storage space to place the WS2812FX library.
 
 */
 
-
-// UNIT_ID can be set to a number between 1 and 254
-// If UNIT_ID is set to 0 here, the unit ID can also be reconfigured later via remote messages
-
-#define UNIT_ID 1
-#define CHANNEL_COUNT 10
+#define UNIT_ID       1 // RIOC unit ID
+#define CHANNEL_COUNT 7 // number of user channels
 
 #include "RiocDevice.h"
 
@@ -42,6 +45,7 @@
 //   NEO_RGBW    Pixels are wired for RGBW bitstream (NeoPixel RGBW products)
 WS2812FX ws2812fx = WS2812FX(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
+// WS2812FX parameters
 uint8_t  _fxBrightness = 30;
 uint16_t _fxSpeed = 1000;
 uint8_t  _fxColorR = 0x00;
@@ -55,18 +59,21 @@ void setup()
   initRioc(UNIT_ID, CHANNEL_COUNT);
 
   // initialize user channels 
-  ROUserChannel* channel1 = createUserChannel(1);
-  ROUserChannel* channel2 = createUserChannel(2);
-  ROUserChannel* channel3 = createUserChannel(3);
-  ROUserChannel* channel4 = createUserChannel(4);
-  ROUserChannel* channel5 = createUserChannel(5);
-  ROUserChannel* channel6 = createUserChannel(6);
-  channel1->write(_fxBrightness);
-  channel2->write(_fxSpeed);
-  channel3->write(_fxColorR);
-  channel4->write(_fxColorG);
-  channel5->write(_fxColorB);
-  channel6->write(_fxMode);
+  createUserChannel(0);
+  createUserChannel(1);
+  createUserChannel(2);
+  createUserChannel(3);
+  createUserChannel(4);
+  createUserChannel(5);
+  createUserChannel(6);
+
+  writeUserChannel(0, 0); // reserved
+  writeUserChannel(1, _fxBrightness);
+  writeUserChannel(2, _fxSpeed);
+  writeUserChannel(3, _fxColorR);
+  writeUserChannel(4, _fxColorG);
+  writeUserChannel(5, _fxColorB);
+  writeUserChannel(6, _fxMode);
   
   // initialize ws2812fx
   ws2812fx.init();
@@ -82,12 +89,12 @@ void loop()
   processRioc();
 
   // read user channels
-  uint8_t  fxBrightness = userChannel(1)->read();
-  uint16_t fxSpeed      = userChannel(2)->read();
-  uint8_t  fxColorR     = userChannel(3)->read();
-  uint8_t  fxColorG     = userChannel(4)->read();
-  uint8_t  fxColorB     = userChannel(5)->read();
-  uint8_t  fxMode       = userChannel(6)->read();
+  uint8_t  fxBrightness = readUserChannel(1);
+  uint16_t fxSpeed      = readUserChannel(2);
+  uint8_t  fxColorR     = readUserChannel(3);
+  uint8_t  fxColorG     = readUserChannel(4);
+  uint8_t  fxColorB     = readUserChannel(5);
+  uint8_t  fxMode       = readUserChannel(6);
 
   // update ws2812fx parameters 
   if (_fxBrightness != fxBrightness) {

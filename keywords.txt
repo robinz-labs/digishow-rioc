@@ -20,11 +20,11 @@ processRioc             KEYWORD2
 setupRioc               KEYWORD2
 executeRioc             KEYWORD2
 createObject            KEYWORD2
-createUserChannel       KEYWORD2
-userChannel             KEYWORD2
 userChannelCount        KEYWORD2
-read                    KEYWORD2
-write                   KEYWORD2
+userChannel             KEYWORD2
+createUserChannel       KEYWORD2
+readUserChannel         KEYWORD2
+writeUserChannel        KEYWORD2
 
 #######################################
 # Instances and Variables

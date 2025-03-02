@@ -33,10 +33,9 @@ bool ROEncoder::setup(byte msg[8], byte address_from)
 {
   if (_pinA != -1) return false; 
 
-
   int pinA = msg[2];
   int pinB = msg[3];
-  int mode = msg[4]; // reserved
+  int mode = msg[4];
   unsigned int sampleInterval = ((unsigned int)msg[5] << 8) | (unsigned int)msg[6];
 
   if (pinA<=DI_PIN_MAX_NUMBER && pinB<=DI_PIN_MAX_NUMBER && pinA!=pinB) {
@@ -50,13 +49,8 @@ bool ROEncoder::setup(byte msg[8], byte address_from)
     _valA = HIGH;
     _valB = HIGH;
 
-#if defined(OPT_UD_ALADDIN)
-    pinMode(_pinA, INPUT); // use pulldown resister on aladdin board
-    pinMode(_pinB, INPUT);
-#else
-    pinMode(_pinA, (_mode ? INPUT : INPUT_PULLUP));
-    pinMode(_pinB, (_mode ? INPUT : INPUT_PULLUP));
-#endif
+    pinMode(_pinA, riocPinModeConfig(_mode));
+    pinMode(_pinB, riocPinModeConfig(_mode));
 
     return true;
   } 
