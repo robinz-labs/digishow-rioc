@@ -71,7 +71,7 @@
 class RiocMessager;
 
 class RiocObject {
-		
+
 public:
   RiocObject();
   ~RiocObject();
@@ -84,6 +84,11 @@ public:
   virtual void process();
 
   bool isSilent();
+
+protected:
+
+  RiocMessager* _messager;
+  bool _silent;
 
   int riocPinModeConfig(int mode) {
 
@@ -103,12 +108,10 @@ public:
       case 3: config = INPUT_PULLDOWN; break;
       #endif
     }
-  }
-		
-protected:
 
-  RiocMessager* _messager;
-  bool _silent;
+    return config;
+  }
+
 };
 
 
