@@ -55,4 +55,10 @@ V0.51  2025/03/02
 ! simplified user channel functions
 ! updated user channel examples
 ! fixed pull-up/pull-down setting issue
+
+V0.52  2025/02/05
+! fixed bugs in v0.51
+
+V0.53  2025/12/02
+! enhanced support for arduino leonardo and raspberry pico 
  

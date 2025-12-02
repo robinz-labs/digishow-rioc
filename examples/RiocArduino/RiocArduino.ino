@@ -6,10 +6,10 @@
   Copyright 2016-2025 Robin Zhang & Labs
   https://github.com/robinz-labs/digishow-rioc
 
-  version 0.51
-  compatible with digishow 1.6
+  version 0.53
+  compatible with digishow 1.7.5 or later
 
-  This program has been tested with Arduino UNO, Duemilanove, Nano, MEGA and DUE. 
+  This program has been tested with Arduino UNO, Nano, MEGA, Leonardo and Micro. 
   This version is also partially compatible with some other types of boards, 
   such as ESP32 and RP2040.
 

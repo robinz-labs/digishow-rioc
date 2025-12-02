@@ -9,7 +9,7 @@ Enjoys,
  
 ## How to make a RIOC Arduino ?
  
-1. Need an Arduino MEGA, UNO, Nano or a ESP32 board. 
+1. Need an Arduino MEGA, UNO, Nano, Leonardo, Micro (or RaspberryPi Pico, ESP32 board). 
 
 2. Open Library Manager in the Arduino IDE, find and install the library named DigiShow RIOC . 
  

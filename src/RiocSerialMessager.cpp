@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "RiocSerialMessager.h"
+#include "RiocOptional.h"
 
 #define SYNC_MSG_MAX_COUNT  40
 #define SYNC_MSG_TIMEOUT    5000
@@ -40,7 +41,9 @@ RiocSerialMessager::~RiocSerialMessager()
 
 void RiocSerialMessager::begin()
 {
-
+  #ifdef OPT_USB_VIRTUAL_SERIAL
+  while (!RIOC_SERIAL) {} // wait for usb serial port to open
+  #endif
 }
 
 void RiocSerialMessager::sendMessage(byte msg[8], byte address_to)

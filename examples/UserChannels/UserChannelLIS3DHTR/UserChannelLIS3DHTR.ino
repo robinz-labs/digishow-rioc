@@ -46,7 +46,6 @@ void setup()
   LIS.begin(Wire, 0x19); //use IIC
   delay(100);
   LIS.setOutputDataRate(LIS3DHTR_DATARATE_50HZ);
-  while (!LIS) delay(100);
 }
 
 void loop()
@@ -59,19 +58,21 @@ void loop()
   if (t != _t) {
     _t = t;
 
-    // value range: -10.0G ~ +10.0G
-    float fx = LIS.getAccelerationX(); 
-    float fy = LIS.getAccelerationY(); 
-    float fz = LIS.getAccelerationZ();
+    if (LIS) {
+      // value range: -10.0G ~ +10.0G
+      float fx = LIS.getAccelerationX(); 
+      float fy = LIS.getAccelerationY(); 
+      float fz = LIS.getAccelerationZ();
 
-    // value range: 0 ~ 20000
-    int x = constrain(fx*1000, -10000, 10000) + 10000;
-    int y = constrain(fy*1000, -10000, 10000) + 10000;
-    int z = constrain(fz*1000, -10000, 10000) + 10000;
-    
-    // write user channels
-    writeUserChannel(0, x);
-    writeUserChannel(1, y);
-    writeUserChannel(2, z);
+      // value range: 0 ~ 20000
+      int x = constrain(fx*1000, -10000, 10000) + 10000;
+      int y = constrain(fy*1000, -10000, 10000) + 10000;
+      int z = constrain(fz*1000, -10000, 10000) + 10000;
+      
+      // write user channels
+      writeUserChannel(0, x);
+      writeUserChannel(1, y);
+      writeUserChannel(2, z);
+    }  
   }
 }

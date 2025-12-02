@@ -6,7 +6,7 @@
 #include "ROUserChannel.h"
 
 #define RIOC_VERSION_MAJOR 0
-#define RIOC_VERSION_MINOR 51
+#define RIOC_VERSION_MINOR 53
 
 #define RO_GENERAL_DIGITAL_IN           0x01
 #define RO_GENERAL_DIGITAL_OUT          0x02

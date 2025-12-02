@@ -2,6 +2,10 @@
 #include <EEPROM.h>
 #endif
 
+#if defined(__AVR_ATmega32U4__)
+  #include <avr/wdt.h>
+#endif
+
 #include "RiocOptional.h"
 #include "RiocDevice.h"
 #include "RiocGlobal.h"
@@ -68,7 +72,6 @@
 #include "ROIrReceiver.h"
 #endif
 
-
 byte unitDescription[4] = {'R', 'I', 'O', 'C'};
 
 RiocMessager* messager;
@@ -121,26 +124,19 @@ void initRioc(byte unitId, int userChannelCount)
   for (int n=0 ; n<channelCount ; n++) {
     channelObject[n] = NULL;
   }
-  
+
   // pins occupied
-  pinOccupied[0] = true;    // uart0
-  pinOccupied[1] = true;
-
-  #if defined(__SAM3X8E__) || defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)  
-  pinOccupied[14] = true;   // uart3
-  pinOccupied[15] = true;
-  pinOccupied[16] = true;   // uart2
-  pinOccupied[17] = true;
-  pinOccupied[18] = true;   // uart1
-  pinOccupied[19] = true;
+  #if defined(PIN_RESET)
+  pinOccupied[PIN_RESET] = true; // pin for wire to reset
   #endif
 
-  #ifdef PIN_RESET
-  pinOccupied[PIN_RESET] = true;    // pin for wire to reset
+  #if defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__) || defined(__AVR_ATmega_328__) || defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__) || defined(__SAM3X8E__)
+  pinOccupied[0] = true;
+  pinOccupied[1] = true; // pins used by uart0
   #endif
 
-  // ports occupied
-  portOccupied[0] = true;   // rioc messager
+  // port occupied by rioc messager
+  portOccupied[0] = true;
 
   // get unit id of this rioc device
   if (unitId == 0) {
@@ -199,37 +195,29 @@ void onMessageReceived(byte msg[8], byte address_from)
 
     if (msg[1]==0x01) {
 
-      // rioc reset message
-
-      #ifdef OPT_USB_VIRTUAL_SERIAL
-
-        // limitations of the board that uses an USB virtual serial port: 
-        // resetting the device will cause the serial connection to terminate !!
-
-        // alternative:
-        // no longer reset device here, unable to clear IO pin configurations by calling a RIOC reset message.
-        // if you need to clear the IO pin configurations, you must manually reset the device power.
-
-        // just send a fake reset message in response
-        byte msg[] = {0x00, 0x8f, 0, 0, 0, 0, 0, 0};
-        messager->sendMessage(msg, address_from); 
-
-      #else
-
-        // reset device to clear all existing IO pin configurations
-        #ifdef PIN_RESET
+      // reset device to clear all existing IO pin configurations
+      #if defined(PIN_RESET)
         pinMode(PIN_RESET, OUTPUT);
         digitalWrite(PIN_RESET, LOW);
-        delay(200);
-        #endif
-
+      #elif defined(__AVR_ATmega32U4__)
+        wdt_enable(WDTO_15MS);
+      #elif defined(ARDUINO_ARCH_AVR)
         resetFunc();
-
-        byte msg[] = {0x00, 0x81, 0, 0, 0, 0, 0, 0};
-        messager->sendMessage(msg, address_from); // send it only when failed to reset
-
+      #elif defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
+        ESP.restart();
+      #elif defined(ARDUINO_ARCH_RP2040)
+        rp2040.reboot();
+      #elif defined(ARDUINO_ARCH_SAM) || defined(ARDUINO_ARCH_SAMD)
+        NVIC_SystemReset();
       #endif
-    
+
+      // reboot the arduino now ...
+      delay(1000);
+
+      // a fake response is only sent if the reboot fails
+      byte msg[] = {0x00, 0x8f, 0, 0, 0, 0, 0, 0};
+      messager->sendMessage(msg, address_from);
+
     } else if (msg[1]==0x02) {
       
       // get unit version
@@ -418,6 +406,16 @@ RiocObject* setupRioc(byte msg[8], byte address_from)
       int port = msg[2];
       portOccupied[port] = true;
       portObject[port] = obj;
+
+      switch (port) {
+      #if defined(__SAM3X8E__) || defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__) 
+        case 3: pinOccupied[14] = true; pinOccupied[15] = true; break; // uart3
+        case 2: pinOccupied[16] = true; pinOccupied[17] = true; break; // uart2
+        case 1: pinOccupied[18] = true; pinOccupied[19] = true; break; // uart1
+      #elif defined(__AVR_ATmega32U4__)
+        case 1: pinOccupied[0]  = true; pinOccupied[1]  = true; break; // uart1
+      #endif
+      }
 #endif
 
 #if defined(OPT_ENABLE_MOTOR) || defined(OPT_ENABLE_ENCODER) || defined(OPT_ENABLE_ULTRASONIC) 
